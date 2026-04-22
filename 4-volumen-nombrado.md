@@ -10,6 +10,12 @@ docker volume create <nombre volumen>
 ### Crear el volumen nombrado: vol-postgres
 # COMPLETAR CON EL COMANDO
 
+el comando es: 
+
+docker volume create vol-postgres
+
+![alt text](image-5.png)
+
 ## MOUNTPOINT
 Un mountpoint se refiere al lugar en el sistema de archivos donde un dispositivo de almacenamiento se une (o monta) al sistema de archivos. Es el punto donde los archivos y directorios almacenados en ese dispositivo de almacenamiento son accesibles para el sistema operativo y las aplicaciones.
 
@@ -41,33 +47,57 @@ docker run -d --name <nombre contenedor> --mount type=volume,src=<nombre >,dst=<
 ### Crear la red net-drupal de tipo bridge
 # COMPLETAR CON EL COMANDO
 
+el comando es: 
+
+docker network create net-drupal
+
+![alt text](image-6.png)
+
 ### Crear un servidor postgres vinculado a la red net-drupal, completar la ruta del contenedor
 ```
 docker run -d --name server-postgres -e POSTGRES_DB=db_drupal -e POSTGRES_PASSWORD=12345 -e POSTGRES_USER=user_drupal --network net-drupal postgres
 ```
+![alt text](image-7.png)
 _No es necesario exponer el puerto, debido a que nos vamos a conectar desde la misma red de docker_
 
 ### Crear un cliente postgres vinculado a la red drupal a partir de la imagen dpage/pgadmin4, completar el correo
 ```
-docker run -d --name client-postgres --publish published=9500,target=80 -e PGADMIN_DEFAULT_PASSWORD=54321 -e PGADMIN_DEFAULT_EMAIL=<correo> --network net-drupal dpage/pgadmin4
+docker run -d --name client-postgres --publish published=9500,target=80 -e PGADMIN_DEFAULT_PASSWORD=54321 -e PGADMIN_DEFAULT_EMAIL=admin@epn.edu.ec --network net-drupal dpage/pgadmin4
 ```
-
+![alt text](image-8.png)
 ### Usar el cliente postgres para conectarse al servidor postgres, para la conexión usar el nombre del servidor en lugar de la dirección IP.
 
 ### Crear los volúmenes necesarios para drupal, esto se puede encontrar en la documentación
 ### COMPLETAR CON LOS COMANDOS
 
+Los comandos son:
+
+```
+docker volume create drupal_files
+docker volume create drupal_modules
+docker volume create drupal_themes
+docker volume create drupal_profiles
+```
+![alt text](image-9.png)
+
 ### Crear el contenedor server-drupal vinculado a la red, usar la imagen drupal, y vincularlo a los volúmenes nombrados
 ```
-docker run -d --name server-drupal --publish published=9700,target=80 -v <nombre volumen>:<ruta contenedor> -v <nombre volumen>:<ruta contenedor> -v <nombre volumen>:<ruta contenedor> -v <nombre volumen>:<ruta contenedor> --network net-drupal drupal
+docker run -d --name server-drupal --publish published=9700,target=80 -v drupal_files:/var/www/html/sites/default/files -v drupal_modules:/var/www/html/modules -v drupal_themes:/var/www/html/themes -v drupal_profiles:/var/www/html/profiles --network net-drupal drupal
 ```
+![alt text](image-10.png)
 
 ### Ingrese al server-drupal y siga el paso a paso para la instalación.
 # COMPLETAR CON UNA CAPTURA DE PANTALLA DEL PASO 4
 
+![alt text](image-11.png)
+
+![alt text](image-12.png)
+
 _La instalación puede tomar varios minutos, mientras espera realice un diagrama de los contenedores que ha creado en este apartado._
 
 # COMPLETAR CON EL DIAGRAMA SOLICITADO
+
+el diagrama se encuentra en el archivo diagrama-arquitectura.md
 
 ### Eliminar un volumen específico
 ```
